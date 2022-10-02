@@ -1,7 +1,15 @@
 # Python Person Sensor Example for a Raspberry Pi
 
-This example shows how to read a Person Sensor from Useful Sensors with Python
-on a Raspberry Pi.
+## Introduction
+
+The Person Sensor is a small hardware module that's intended to make it easy to
+find out when people are near a device, where they are, and who they are. It has
+an image sensor and a microcontroller with pretrained ML models that use
+computer vision to spot faces. 
+
+There's a [detailed developer guide](https://usfl.ink/ps_dev)
+available, but this project has sample code that shows you specifically how to 
+get the sensor up and running with a Raspberry Pi using Python.
 
 ## Configure Your Pi
 
