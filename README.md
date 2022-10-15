@@ -81,4 +81,8 @@ python person_sensor.py
 ```
 
 You should see logging output showing information about the people the script
-is detecting.
+is detecting. Here's an example:
+
+```Python
+1 [{'box_confidence': 98, 'box_left': 101, 'box_top': 49, 'box_width': 134, 'box_height': 103, 'id_confidence': 0, 'id': -1, 'is_facing': 0}]
+```
