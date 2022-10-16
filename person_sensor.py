@@ -35,38 +35,38 @@ i2c_handle = io.open("/dev/i2c-" + str(I2C_CHANNEL), "rb", buffering=0)
 fcntl.ioctl(i2c_handle, I2C_PERIPHERAL, PERSON_SENSOR_I2C_ADDRESS)
 
 while True:
-  try:
-    read_bytes = i2c_handle.read(PERSON_SENSOR_RESULT_BYTE_COUNT)
-  except OSError as error:
-    print("No person sensor data found")
-    print(error)
-    time.sleep(PERSON_SENSOR_DELAY)
-    continue
-  offset = 0
-  (pad1, pad2, payload_bytes) = struct.unpack_from(
-    PERSON_SENSOR_I2C_HEADER_FORMAT, read_bytes, offset)
-  offset = offset + PERSON_SENSOR_I2C_HEADER_BYTE_COUNT
+    try:
+        read_bytes = i2c_handle.read(PERSON_SENSOR_RESULT_BYTE_COUNT)
+    except OSError as error:
+        print("No person sensor data found")
+        print(error)
+        time.sleep(PERSON_SENSOR_DELAY)
+        continue
+    offset = 0
+    (pad1, pad2, payload_bytes) = struct.unpack_from(
+        PERSON_SENSOR_I2C_HEADER_FORMAT, read_bytes, offset)
+    offset = offset + PERSON_SENSOR_I2C_HEADER_BYTE_COUNT
 
-  (num_faces) = struct.unpack_from("B", read_bytes, offset)
-  num_faces = int(num_faces[0])
-  offset = offset + 1
+    (num_faces) = struct.unpack_from("B", read_bytes, offset)
+    num_faces = int(num_faces[0])
+    offset = offset + 1
 
-  faces = []
-  for i in range(num_faces):
-    (box_confidence, box_left, box_top, box_width, box_height, id_confidence, id,
-      is_facing) = struct.unpack_from(PERSON_SENSOR_FACE_FORMAT, read_bytes, offset)
-    offset = offset + PERSON_SENSOR_FACE_BYTE_COUNT
-    face = {
+    faces = []
+    for i in range(num_faces):
+        (box_confidence, box_left, box_top, box_right, box_bottom, id_confidence, id,
+         is_facing) = struct.unpack_from(PERSON_SENSOR_FACE_FORMAT, read_bytes, offset)
+        offset = offset + PERSON_SENSOR_FACE_BYTE_COUNT
+        face = {
             "box_confidence": box_confidence,
             "box_left": box_left,
             "box_top": box_top,
-            "box_width": box_width,
-            "box_height": box_height,
+            "box_right": box_right,
+            "box_bottom": box_bottom,
             "id_confidence": id_confidence,
             "id": id,
             "is_facing": is_facing,
-    }
-    faces.append(face)
-  checksum = struct.unpack_from("H", read_bytes, offset)
-  print(num_faces, faces)
-  time.sleep(PERSON_SENSOR_DELAY)
+        }
+        faces.append(face)
+    checksum = struct.unpack_from("H", read_bytes, offset)
+    print(num_faces, faces)
+    time.sleep(PERSON_SENSOR_DELAY)
